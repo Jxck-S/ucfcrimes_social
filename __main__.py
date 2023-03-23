@@ -1,0 +1,58 @@
+'''
+UCFCrimes bot
+
+03.22.2023
+'''
+pdf_filename = 'AllDailyCrimeLog.pdf'
+import requests
+from py_pdf_parser.loaders import load_file
+from math import floor
+import json
+import time
+from notifycase import notify_case
+latest_case_id = "2023-0902"
+locations = {200: "campus", 272: "disposition", 555: "location", 480: "occur_end", 423: "occur_start", 88: "type", 37: "case_id", 343: "reported_dt"}
+
+while True:
+    rsp = requests.get("https://police.ucf.edu/sites/default/files/logs/ALL%20DAILY%20crime%20log.pdf", timeout=30)
+    open(pdf_filename, 'wb').write(rsp.content)
+    document = load_file(pdf_filename)
+    cases = []
+    cases = {}
+    parsed_current = {}
+    for elem in document.elements:
+        if "Bold" in elem.font and elem.font_size == 8.0 and parsed_current != {}:
+            #print("clearing ", parsed_current)
+            parsed_current = {}
+        #print(elem.text())
+
+        if elem.font_size < 9:
+            parsed_current[locations[floor(elem.original_element.x0)]] = elem.text().replace("\n", " ").replace("Location ", "").strip()
+        #print(parsed_current)
+        if len(list(parsed_current.keys())) == 8:
+            cases[parsed_current['case_id']] = parsed_current
+    clist = list(cases.keys())
+    if not latest_case_id:
+        latest_case_id = clist[-1]
+        print(f"Started newest case is  {latest_case_id}")
+        #print(json.dumps(cases, indent=4))
+        with open("cases.json", "w") as file:
+            json.dump(cases, file, indent=4)
+
+
+    elif latest_case_id != clist[-1]:
+
+        reached_old = False
+        new_count = 0
+        for case_id, case in cases.items():
+            if case_id == latest_case_id:
+                reached_old = True
+            elif reached_old:
+                new_count += 1
+                notify_case(case)
+                print(f"New case {case_id}")
+        latest_case_id = clist[-1]
+        print(f"New cases detected  {new_count}")
+    time.sleep(5*60)
+
+
