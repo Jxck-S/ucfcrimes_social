@@ -2,18 +2,21 @@ def notify_case(case):
     from send_telegram import sendTeleg
     from configparser import ConfigParser
     from meta_toolkit import post_to_meta_both
+    from adjust_address import replace_address
+    
     main_config = ConfigParser()
     main_config.read('config.ini')
     generate_image(case, main_config.get("GOOGLE", "API_KEY"))
-    emoji_pairs = {"cannabis": "🌿🚬", "dui": "🍸🚗", "reckless drving": "🚗", "traffic": "🚗", "counterfeit dl": "🪪🆔", "license": "🪪🆔"}
+    emoji_pairs = {"cannabis": "🌿🚬", "dui": "🍸🚗", "reckless drving": "💥🚗", "traffic": "🚗🚓", "counterfeit dl": "🪪🆔", "license": "🪪🆔"}
     fun_type = case['type'].title()
     for word, emoji in emoji_pairs.items():
         if word in case['type'].lower():
             fun_type = case['type'].title() + " " + emoji
 
+
     message = f"""{fun_type}
 Case#: ({case['case_id']}) reported at {case['reported_dt']}.
-Occured at {ucf_title(case['campus'])}, {case['location'].title()}
+Occured at {ucf_title(case['campus'])}, {replace_address(case['location'])}
 At times: {case['occur_start']} - {case['occur_end']}
 Status is {case['disposition'].title()}."""
     photo = open('caseout.png', "rb")
@@ -22,6 +25,7 @@ Status is {case['disposition'].title()}."""
     if main_config.getboolean("TELEGRAM", "ENABLE"):
         sendTeleg(message, main_config, photo)
     return None
+
 def ucf_title(string):
     parts = string.split()
     new_string = ""
@@ -31,6 +35,7 @@ def ucf_title(string):
         else:
             new_string += part + " "
     return new_string.strip()
+
 def generate_image(case,key):
     import googlemaps
     import staticmaps
