@@ -8,17 +8,20 @@ def notify_case(case):
     main_config.read('config.ini')
     generate_image(case, main_config.get("GOOGLE", "API_KEY"))
     emoji_pairs = {"cannabis": "🌿🚬", "dui": "🍸🚗", "reckless drving": "💥🚗", "traffic": "🚗🚓", "counterfeit dl": "🪪🆔", "license": "🪪🆔"}
-    fun_type = case['type'].title()
-    for word, emoji in emoji_pairs.items():
-        if word in case['type'].lower():
-            fun_type = case['type'].title() + " " + emoji
+    fun_type = ""
+    for word in case['type'].split():
+        if word.lower() in emoji_pairs.keys():
+            fun_type += title_except(word, ["DUI", "DL", "NOS"]) + " " + emoji_pairs[word.lower()] + " "
+        else:
+            fun_type += title_except(word, ["DUI", "DL", "NOS"]) + " "
 
 
     message = f"""{fun_type}
 Case#: ({case['case_id']}) reported at {case['reported_dt']}.
-Occured at {ucf_title(case['campus'])}, {replace_address(case['location'])}
+Occured at {title_except(case['campus'], ["UCF"])}, {title_except(replace_address(case['location']), ["UCF"])}
 At times: {case['occur_start']} - {case['occur_end']}
 Status is {case['disposition'].title()}."""
+    print(message)
     photo = open('caseout.png', "rb")
     if main_config.getboolean("META", "ENABLE"):
         post_to_meta_both(main_config.get("META", "FB_PAGE_ID"), main_config.get("META", "IG_USER_ID"), 'caseout.png', message, main_config.get("META", "ACCESS_TOKEN"))
@@ -26,11 +29,11 @@ Status is {case['disposition'].title()}."""
         sendTeleg(message, main_config, photo)
     return None
 
-def ucf_title(string):
+def title_except(string, excepts):
     parts = string.split()
     new_string = ""
     for part in parts:
-        if part != "UCF":
+        if part not in excepts:
             new_string += part.title() + " "
         else:
             new_string += part + " "
