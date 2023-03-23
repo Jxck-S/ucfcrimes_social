@@ -8,9 +8,10 @@ import requests
 from py_pdf_parser.loaders import load_file
 from math import floor
 import json
+import datetime
 import time
 from notifycase import notify_case
-latest_case_id = "2023-0902"
+latest_case_id = None
 locations = {200: "campus", 272: "disposition", 555: "location", 480: "occur_end", 423: "occur_start", 88: "type", 37: "case_id", 343: "reported_dt"}
 
 while True:
@@ -53,6 +54,13 @@ while True:
                 print(f"New case {case_id}")
         latest_case_id = clist[-1]
         print(f"New cases detected  {new_count}")
-    time.sleep(5*60)
+
+    # get current date and time
+    now = datetime.datetime.now()
+    # calculate time until next day at 12:05 am
+    target_time = datetime.datetime(now.year, now.month, now.day+1, 0, 5)
+    time_delta = target_time - now
+    seconds_until_target = time_delta.total_seconds()
+    time.sleep(seconds_until_target)
 
 
