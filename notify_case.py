@@ -7,9 +7,20 @@ def notify_case(case):
     main_config = ConfigParser()
     main_config.read('config.ini')
     generate_image(case, main_config.get("GOOGLE", "API_KEY"))
-    emoji_pairs = {"cannabis": "🌿🚬", "dui": "🍸🚗", "reckless drving": "💥🚗", "traffic": "🚗🚓", "counterfeit dl": "🪪🆔", "license": "🪪🆔"}
+    import json
+    with open('constants.json', encoding="utf8") as f:
+        constants = json.load(f)
+    emoji_pairs = constants['emoji_pairs']
+    replace_words = constants['replace_words']
+    def replace_word(word, replace_words):
+        word = word.lower()
+        if word in replace_words.keys():
+            return replace_words[word]
+        else:
+            return word
     fun_type = ""
     for word in case['type'].split():
+        word = replace_word(word, replace_words)
         if word.lower() in emoji_pairs.keys():
             fun_type += title_except(word, ["DUI", "DL", "NOS"]) + " " + emoji_pairs[word.lower()] + " "
         else:

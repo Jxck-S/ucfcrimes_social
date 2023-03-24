@@ -10,7 +10,7 @@ from math import floor
 import json
 import datetime
 import time
-from notifycase import notify_case
+from notify_case import notify_case
 latest_case_id = None
 locations = {200: "campus", 272: "disposition", 555: "location", 480: "occur_end", 423: "occur_start", 88: "type", 37: "case_id", 343: "reported_dt"}
 

@@ -1,0 +1,14 @@
+{"emoji_pairs": 
+    {
+    "cannabis": "🌿🚬", 
+    "dui": "🍸🚗", 
+    "reckless drving": "💥🚗", 
+    "traffic": "🚗🚓", 
+    "counterfeit dl": "🪪🆔", 
+    "license": "🪪🆔"
+    },
+"replace_words":
+    {
+    "petit": "petty"
+    }
+}
