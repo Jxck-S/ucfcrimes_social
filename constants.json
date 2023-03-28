@@ -1,14 +1,25 @@
 {"emoji_pairs": 
     {
-    "cannabis": "🌿🚬", 
-    "dui": "🍸🚗", 
-    "reckless drving": "💥🚗", 
-    "traffic": "🚗🚓", 
-    "counterfeit dl": "🪪🆔", 
-    "license": "🪪🆔"
+        ".02": "🥂",
+        "cannabis": "🌿🚬",
+        "counterfeit dl": "🚫🆔",
+        "defraud": "💵",
+        "drug": "💊",
+        "dui": "🍸🚗",
+        "fire": "🔥",
+        "grand": "💎",
+        "grocery cart": "🛒",
+        "imprisonment": "⛓️",
+        "petty": "💲",
+        "reckless": "💥🚗",
+        "stalking": "🕶️",
+        "traffic": "🚗🚓",
+        "trespass": "🚧🚧",
+        "vehicle": "🚗"
     },
+
 "replace_words":
     {
-    "petit": "petty"
+        "petit": "petty"
     }
 }

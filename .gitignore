@@ -7,3 +7,5 @@ AllDailyCrimeLog.pdf
 /__pycache__
 config.ini
 test_meta.py
+test_cases.json
+test_message.py
