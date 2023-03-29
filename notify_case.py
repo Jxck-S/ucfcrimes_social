@@ -24,6 +24,7 @@ def notify_case(case):
     from adjust_address import replace_address
     from datetime import datetime
     import json
+    import re
         
     with open('constants.json', encoding="utf8") as f:
         constants = json.load(f)
@@ -36,8 +37,9 @@ def notify_case(case):
     replace_words = constants['replace_words']
         
     # Fix title
+    old_title = re.sub(',', ', ', case['type'])
     title = ''
-    for word in case['type'].split():
+    for word in old_title.split():
          title += title_except(replace_word(word, replace_words), ["DUI", "DL", "NOS"])
          title += ' '
 
@@ -54,7 +56,7 @@ def notify_case(case):
     end = datetime.strptime(case['occur_end'], '%m/%d/%Y %H:%M').strftime('%m/%d/%y %I:%M %p')
 
     message = f"""{title}
-Case: #{case['case_id']} reported on {reported}
+Case #: {case['case_id']} reported on {reported}
 Occured at {title_except(case['campus'], ["UCF"])}, {title_except(replace_address(case['location']), ["UCF", "UCFPD"])}
 Between {start} - {end}
 Status: {case['disposition'].title()}"""
