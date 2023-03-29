@@ -94,6 +94,8 @@ def generate_image(case,key):
     im2 = Image.open('case.png')
     im1.paste(im2, (700, 700))
     draw = ImageDraw.Draw(im1)
+    #Vert
     draw.line((700, 700, 700, 1080), fill=(0, 0, 0), width=10)
-    draw.line((700, 700, 1080, 700), fill=(0, 0, 0), width=10)
+    #Horz
+    draw.line((696, 700, 1080, 700), fill=(0, 0, 0), width=10)
     im1.save('caseout.png', quality=100)
