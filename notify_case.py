@@ -40,7 +40,7 @@ def notify_case(case):
     old_title = re.sub(',', ', ', case['type'])
     title = ''
     for word in old_title.split():
-         title += title_except(replace_word(word, replace_words), ["DUI", "DL", "NOS"])
+         title += title_except(replace_word(word, replace_words), ["DUI", "DL", "NOS", "1st", "2nd", "3rd"])
          title += ' '
 
     # Add emojis to end of title
