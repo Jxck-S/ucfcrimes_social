@@ -9,3 +9,4 @@ config.ini
 test_meta.py
 test_cases.json
 test_message.py
+config.ini
