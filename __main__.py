@@ -9,6 +9,8 @@ from py_pdf_parser.loaders import load_file
 from math import floor
 import json
 import datetime
+import datetime
+import calendar
 import time
 from notify_case import notify_case
 latest_case_id = None
@@ -57,10 +59,14 @@ while True:
 
     # get current date and time
     now = datetime.datetime.now()
+    # get the number of days in the current month
+    last_day = calendar.monthrange(now.year, now.month)[1]
     # calculate time until next day at 12:05 am
-    target_time = datetime.datetime(now.year, now.month, now.day+1, 0, 5)
+    if now.day == last_day:
+        target_time = datetime.datetime(now.year, now.month+1, 1, 0, 5)
+    else:
+        target_time = datetime.datetime(now.year, now.month, now.day+1, 0, 5)
     time_delta = target_time - now
+    print(f"Sleeping until {target_time} ({time_delta})")
     seconds_until_target = time_delta.total_seconds()
     time.sleep(seconds_until_target)
-
-
