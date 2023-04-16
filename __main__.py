@@ -17,8 +17,11 @@ latest_case_id = None
 locations = {200: "campus", 272: "disposition", 555: "location", 480: "occur_end", 423: "occur_start", 88: "type", 37: "case_id", 343: "reported_dt"}
 
 while True:
-    rsp = requests.get("https://police.ucf.edu/sites/default/files/logs/ALL%20DAILY%20crime%20log.pdf", timeout=30)
-    open(pdf_filename, 'wb').write(rsp.content)
+    try:
+        rsp = requests.get("https://police.ucf.edu/sites/default/files/logs/ALL%20DAILY%20crime%20log.pdf", timeout=30)
+        open(pdf_filename, 'wb').write(rsp.content)
+    except requests.exceptions.RequestException as e:
+        print(f"Error occurred while fetching the PDF: {e}")
     document = load_file(pdf_filename)
     cases = []
     cases = {}
