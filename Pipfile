@@ -11,6 +11,7 @@ py-staticmaps = {extras = ["cairo"], version = "*"}
 googlemaps = "*"
 py-pdf-parser = "*"
 editdistance = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

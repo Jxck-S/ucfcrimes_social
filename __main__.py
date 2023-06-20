@@ -1,62 +1,73 @@
 '''
-UCFCrimes bot
+UCFCrimes_Social bot
 
-03.22.2023
+04.05.2023
 '''
-pdf_filename = 'AllDailyCrimeLog.pdf'
 import requests
-from py_pdf_parser.loaders import load_file
 from math import floor
 import json
-import datetime
-import datetime
-import calendar
-import time
 from notify_case import notify_case
 latest_case_id = None
-locations = {200: "campus", 272: "disposition", 555: "location", 480: "occur_end", 423: "occur_start", 88: "type", 37: "case_id", 343: "reported_dt"}
+import psycopg2, psycopg2.extras
+from configparser import ConfigParser
+main_config = ConfigParser()
+main_config.read('config.ini')
+import time, calendar, datetime
+table = main_config.get('postgresql', 'table')
+def setup_db(main_config):
+    # Connect to the PostgreSQL database
+    conn = psycopg2.connect(
+        host = main_config.get('postgresql', 'host'),
+        database = main_config.get('postgresql', 'database'),
+        user = main_config.get('postgresql', 'user'),
+        password = main_config.get('postgresql', 'password')
 
+    )
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    return conn, cur
 while True:
-    rsp = requests.get("https://police.ucf.edu/sites/default/files/logs/ALL%20DAILY%20crime%20log.pdf", timeout=30)
-    open(pdf_filename, 'wb').write(rsp.content)
-    document = load_file(pdf_filename)
-    cases = []
-    cases = {}
-    parsed_current = {}
-    for elem in document.elements:
-        if "Bold" in elem.font and elem.font_size == 8.0 and parsed_current != {}:
-            #print("clearing ", parsed_current)
-            parsed_current = {}
-        #print(elem.text())
-
-        if elem.font_size < 9:
-            parsed_current[locations[floor(elem.original_element.x0)]] = elem.text().replace("\n", " ").replace("Location ", "").strip()
-        #print(parsed_current)
-        if len(list(parsed_current.keys())) == 8:
-            cases[parsed_current['case_id']] = parsed_current
-    clist = list(cases.keys())
+    conn, cur = setup_db(main_config)
+    #First Run
     if not latest_case_id:
-        latest_case_id = clist[-1]
+        sql = f"""
+        SELECT id, case_id
+        FROM {table}
+        ORDER BY id DESC
+        LIMIT 1
+        """
+        # Execute the SQL statement with fetchone() method
+        cur.execute(sql)
+        if cur.rowcount > 0:
+            latest_case_id = cur.fetchone()['id']
+        else:
+            latest_case_id = None
         print(f"Started newest case is  {latest_case_id}")
-        #print(json.dumps(cases, indent=4))
-        with open("cases.json", "w") as file:
-            json.dump(cases, file, indent=4)
 
+    else: 
+        sql = f"""
+        SELECT *
+        FROM {table} WHERE id > %s
+        ORDER BY id ASC
+        """
+        cur.execute(sql, (latest_case_id,))
+        if cur.rowcount > 0:
+            cases = cur.fetchall()
 
-    elif latest_case_id != clist[-1]:
-
-        reached_old = False
-        new_count = 0
-        for case_id, case in cases.items():
-            if case_id == latest_case_id:
-                reached_old = True
-            elif reached_old:
+            reached_old = False
+            new_count = 0
+            for case in cases:
+                #print(case)
                 new_count += 1
+                print(f"New case {case['case_id'], case['id']}")
                 notify_case(case)
-                print(f"New case {case_id}")
-        latest_case_id = clist[-1]
-        print(f"New cases detected  {new_count}")
-
+            latest_case_id = cases[-1]['id']
+            print(f"New cases detected  {new_count}")
+        else:
+            print("No new cases")
+    cur.close()
+    conn.close()
+    conn = None
+    cur = None
     # get current date and time
     now = datetime.datetime.now()
     # get the number of days in the current month
@@ -70,3 +81,5 @@ while True:
     print(f"Sleeping until {target_time} ({time_delta})")
     seconds_until_target = time_delta.total_seconds()
     time.sleep(seconds_until_target)
+    print("Running new check")
+

@@ -37,7 +37,7 @@ def notify_case(case):
     replace_words = constants['replace_words']
         
     # Fix title
-    old_title = re.sub(',', ', ', case['type'])
+    old_title = re.sub(',', ', ', case['crime'])
     title = ''
     for word in old_title.split():
          title += title_except(replace_word(word, replace_words), ["DUI", "DL", "NOS", "1st", "2nd", "3rd"])
@@ -50,11 +50,10 @@ def notify_case(case):
              emoji_suffix += f'{emojis[emoji_txt]}' # Must use += and not .join() to preserve encoding
     title += emoji_suffix
 
-    # Change to 12hr time
-    reported = datetime.strptime(case['reported_dt'], '%m/%d/%y %H:%M').strftime('%m/%d/%y %I:%M %p')
-    start = datetime.strptime(case['occur_start'], '%m/%d/%y %H:%M').strftime('%m/%d/%y %I:%M %p')
-    end = datetime.strptime(case['occur_end'], '%m/%d/%Y %H:%M').strftime('%m/%d/%y %I:%M %p')
-
+    # Change to str/12hr time/am/pm
+    reported = case['report_dt'].strftime('%m/%d/%y %I:%M %p')
+    start = case['start_dt'].strftime('%m/%d/%y %I:%M %p')
+    end = case['end_dt'].strftime('%m/%d/%y %I:%M %p')
     message = f"""{title}
 Case #: {case['case_id']} reported on {reported}
 Occured at {title_except(case['campus'], ["UCF"])}, {title_except(replace_address(case['location']), ["UCF", "UCFPD"])}
