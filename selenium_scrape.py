@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 from bs4 import BeautifulSoup
 from configparser import ConfigParser
@@ -23,10 +24,12 @@ def selenium_scrape(expanded_address: str):
     url = 'https://www.google.com/search?q=' + expanded_address.replace(' ', '+')
 
     # Set up Selenium webdriver
-    options = Options()
-    options.add_argument('--headless')
-    service = Service(main_config.get("SELENIUM", "CHROME_DRIVER"))
-    driver = webdriver.Chrome(service=service, options=options)
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.headless = True
+    #Set User Agent so Google doesn't know we are scraping/automating.
+    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     # Get the page and wait for the js to run
     driver.get(url)

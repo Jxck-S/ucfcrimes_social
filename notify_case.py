@@ -3,7 +3,7 @@ from meta_toolkit import post_to_meta_both
 from datetime import datetime
 from send_telegram import sendTeleg
 import string_adjustments as stradj
-
+from gpt_expand import gpt_title_expand
 def notify_case(case):
     # Read the config
     main_config = ConfigParser()
@@ -16,9 +16,9 @@ def notify_case(case):
 
     # Get the emojis from the formatted title
     # This should already have stradj.case_title_format applied to it
-    case_emojis = stradj.get_emojis(case['type'])
-    # This should have gpt_expand.gpt_title_expand applied to it
-    long_title = case['explained_title']
+    case_emojis = stradj.get_emojis(case['crime'])
+
+    long_title = gpt_title_expand(stradj.case_title_format(case['crime']))
 
     # Append the emojis to the title (includes space already)
     case_title = long_title + case_emojis
