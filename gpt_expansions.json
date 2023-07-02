@@ -63,5 +63,45 @@
         "raw": "BATTERY",
         "expanded": "BATTERY",
         "verified_example": true
+    },
+    {
+        "raw": "CRIMINAL MISCHIEF (>$200, <$1000)",
+        "expanded": "CRIMINAL MISCHIEF VALUED BETWEEN $200 AND $1000",
+        "verified_example": false
+    },
+    {
+        "raw": "HARASSING TELEPHONE CALLS",
+        "expanded": "HARASSING TELEPHONE CALLS",
+        "verified_example": false
+    },
+    {
+        "raw": "CRIMINAL MISCHIEF (<=$200)",
+        "expanded": "CRIMINAL MISCHIEF VALUED AT $200 OR LESS",
+        "verified_example": false
+    },
+    {
+        "raw": "AGGRA V ATED ASSAULT WITH A DEADLY WEAPON",
+        "expanded": "AGGRAVATED ASSAULT WITH A DEADLY WEAPON",
+        "verified_example": false
+    },
+    {
+        "raw": "ATTEMPTED BURGLARY OF OCCUPIED DWELLING",
+        "expanded": "ATTEMPTED BURGLARY OF AN OCCUPIED DWELLING",
+        "verified_example": false
+    },
+    {
+        "raw": "FLEE/ELUDE POLICE-FLEE ELUDE LEO WITH LIGHTS SIREN ACTIVE",
+        "expanded": "FLEEING OR ELUDING POLICE - FLEEING OR ELUDING LAW ENFORCEMENT OFFICER WITH LIGHTS AND SIREN ACTIVE",
+        "verified_example": false
+    },
+    {
+        "raw": "GRAND THEFT 3RD DEGREE (>750, <$5000)",
+        "expanded": "GRAND THEFT 3RD DEGREE VALUED AT MORE THAN $750 AND LESS THAN $5000",
+        "verified_example": false
+    },
+    {
+        "raw": "FLEEING/ATT. TO ELUDE POLICE OFFICER >7/04, DRIVE WITH SUSPENDED REVOKED LICENSE, ATTACH TAG/LIC PLATE TO UNASSIGNED VEHICLE, RESISTING OFFICER WITHOUT VIOLENCE",
+        "expanded": "FLEEING OR ATTEMPTING TO ELUDE A POLICE OFFICER SINCE JULY 2004, DRIVING WITH A SUSPENDED OR REVOKED LICENSE, ATTACHING A TAG OR LICENSE PLATE TO AN UNASSIGNED VEHICLE, RESISTING AN OFFICER WITHOUT VIOLENCE",
+        "verified_example": false
     }
 ]
