@@ -9,6 +9,13 @@ import json
 from notify_case import notify_case
 latest_case_id = None
 import psycopg2, psycopg2.extras
+import os, platform
+if platform.system() == "Linux":
+    if os.path.exists("/tmp/crime_social"):
+        import shutil
+        shutil.rmtree("/tmp/crime_social")
+    os.makedirs("/tmp/crime_social")
+    os.makedirs("/tmp/crime_social/chrome")
 from configparser import ConfigParser
 main_config = ConfigParser()
 main_config.read('config.ini')

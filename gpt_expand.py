@@ -48,7 +48,7 @@ def generate_prompt(title: str, provide_examples=True):
 
 # Use model to expand the titles of cases
 def gpt_title_expand(formatted_title, provide_examples=True):
-    API_KEY = main_config.get("OPENAI", "OPENAI_KEY")
+    API_KEY = main_config.get("OPENAI", "API_KEY")
     openai.api_key=API_KEY
     model='gpt-3.5-turbo' # Because this is way cheaper!
 

@@ -12,6 +12,10 @@ googlemaps = "*"
 py-pdf-parser = "*"
 editdistance = "*"
 psycopg2 = "*"
+selenium = "*"
+webdriver-manager = "*"
+openai = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 
