@@ -4,6 +4,8 @@ UCF Crimes gathers data from the UCFPD daily crime log and posts information to 
 
 The UCF Crimes Discord has ability to query over dates and locations. More options will be available in the future.
 
+View our work here: [UCF NSM Article](https://www.nicholsonstudentmedia.com/news/ucf-students-create-crime-tracking-social-media/article_af24e17a-79d4-11ee-8c27-e3a2cc49333f.html)
+
 ## Notes
 
 - UCF Crimes is not affiliated with UCFPD
